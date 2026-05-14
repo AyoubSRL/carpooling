@@ -7,12 +7,15 @@
 
 const DB_HOST = 'localhost';
 const DB_NAME = 'carpooling';
-const DB_USER = 'carpooling';
-const DB_PASSWORD = 'carpooling';
+const DB_USER = 'root';
+const DB_PASSWORD = '';
 const DB_CHAR = 'utf8';
 
 //Sottocartella dove viene eseguita l'applicazione
-const BASE_PATH = '/carpooling';
+const BASE_PATH = '';
+
+//Path alle immagini
+const IMAGES = '/images';
 
 //Attiva il gestore di errori personalizzato
 const MY_ERROR_HANDLER = false;

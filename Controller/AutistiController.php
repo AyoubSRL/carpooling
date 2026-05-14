@@ -2,57 +2,74 @@
 
 namespace Controller;
 
-use Model\ProdottoRepository;
+use Model\AutistiRepository;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
-class ProdottoController
+class AutistiController
 {
-
     private $container;
 
-    // constructor receives container instance
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    public function listAll(Request $request, Response $response, array $args): Response
+    public function index(Request $request, Response $response): Response
     {
-        return $this->listAllByGenre($request, $response, ['genere' => 'All']);
-    }
-
-    public function listAllByGenre(Request $request, Response $response, array $args): Response
-    {
-        $genere = $args['genere'];
-        if ($genere === 'Uomo')
-            $prodotti = ProdottoRepository::listAllMale();
-        else if ($genere === 'Donna')
-            $prodotti = ProdottoRepository::listAllFemale();
-        else
-            $prodotti = ProdottoRepository::listAll();
+        $autisti = AutistiRepository::findAll();
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('negozio',
-            [
-                'prodotti' => $prodotti,
-                'genere' => $genere
-            ]
+        $response->getBody()->write($engine->render('autisti/index',
+            ['autisti' => $autisti]
         ));
         return $response;
     }
 
-    public function showProdotto(Request $request, Response $response, array $args): Response
+    public function show(Request $request, Response $response, array $args): Response
     {
+        $autista = AutistiRepository::find($args['id']);
         $engine = $this->container->get('template');
-        $prodotto = ProdottoRepository::getProdotto($args['id']);
-        $response->getBody()->write($engine->render('prodotto',
-            [
-                'prodotto' => $prodotto,
-
-            ]
+        $response->getBody()->write($engine->render('autisti/show',
+            ['autista' => $autista]
         ));
         return $response;
     }
 
+    public function create(Request $request, Response $response): Response
+    {
+        $engine = $this->container->get('template');
+        $response->getBody()->write($engine->render('autisti/create'));
+        return $response;
+    }
+
+    public function store(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+        AutistiRepository::create($data);
+        return $response->withHeader('Location', '/autisti')->withStatus(302);
+    }
+
+    public function edit(Request $request, Response $response, array $args): Response
+    {
+        $autista = AutistiRepository::find($args['id']);
+        $engine = $this->container->get('template');
+        $response->getBody()->write($engine->render('autisti/edit',
+            ['autista' => $autista]
+        ));
+        return $response;
+    }
+
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        $data = $request->getParsedBody();
+        AutistiRepository::update($args['id'], $data);
+        return $response->withHeader('Location', '/autisti/' . $args['id'])->withStatus(302);
+    }
+
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        AutistiRepository::delete($args['id']);
+        return $response->withHeader('Location', '/autisti')->withStatus(302);
+    }
 }

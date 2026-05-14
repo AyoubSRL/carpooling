@@ -23,11 +23,11 @@ class Connection
 
     public static function getInstance(): PDO
     {
-        if (!isset($pdo)) {
+        if (!isset(self::$pdo)) {
             $DSN = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHAR;
-            $pdo = new PDO($DSN, DB_USER, DB_PASSWORD);
+            self::$pdo = new PDO($DSN, DB_USER, DB_PASSWORD);
         }
-        return $pdo;
+        return self::$pdo;
     }
 }
 

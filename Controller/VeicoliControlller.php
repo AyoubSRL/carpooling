@@ -2,57 +2,74 @@
 
 namespace Controller;
 
-use Model\ProdottoRepository;
+use Model\VeicoliRepository;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
-class ProdottoController
+class VeicoliControlller
 {
-
     private $container;
 
-    // constructor receives container instance
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    public function listAll(Request $request, Response $response, array $args): Response
+    public function index(Request $request, Response $response): Response
     {
-        return $this->listAllByGenre($request, $response, ['genere' => 'All']);
-    }
-
-    public function listAllByGenre(Request $request, Response $response, array $args): Response
-    {
-        $genere = $args['genere'];
-        if ($genere === 'Uomo')
-            $prodotti = ProdottoRepository::listAllMale();
-        else if ($genere === 'Donna')
-            $prodotti = ProdottoRepository::listAllFemale();
-        else
-            $prodotti = ProdottoRepository::listAll();
+        $veicoli = VeicoliRepository::findAll();
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('negozio',
-            [
-                'prodotti' => $prodotti,
-                'genere' => $genere
-            ]
+        $response->getBody()->write($engine->render('veicoli/index',
+            ['veicoli' => $veicoli]
         ));
         return $response;
     }
 
-    public function showProdotto(Request $request, Response $response, array $args): Response
+    public function show(Request $request, Response $response, array $args): Response
     {
+        $veicolo = VeicoliRepository::find($args['id']);
         $engine = $this->container->get('template');
-        $prodotto = ProdottoRepository::getProdotto($args['id']);
-        $response->getBody()->write($engine->render('prodotto',
-            [
-                'prodotto' => $prodotto,
-
-            ]
+        $response->getBody()->write($engine->render('veicoli/show',
+            ['veicolo' => $veicolo]
         ));
         return $response;
     }
 
+    public function create(Request $request, Response $response): Response
+    {
+        $engine = $this->container->get('template');
+        $response->getBody()->write($engine->render('veicoli/create'));
+        return $response;
+    }
+
+    public function store(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+        VeicoliRepository::create($data);
+        return $response->withHeader('Location', '/veicoli')->withStatus(302);
+    }
+
+    public function edit(Request $request, Response $response, array $args): Response
+    {
+        $veicolo = VeicoliRepository::find($args['id']);
+        $engine = $this->container->get('template');
+        $response->getBody()->write($engine->render('veicoli/edit',
+            ['veicolo' => $veicolo]
+        ));
+        return $response;
+    }
+
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        $data = $request->getParsedBody();
+        VeicoliRepository::update($args['id'], $data);
+        return $response->withHeader('Location', '/veicoli/' . $args['id'])->withStatus(302);
+    }
+
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        VeicoliRepository::delete($args['id']);
+        return $response->withHeader('Location', '/veicoli')->withStatus(302);
+    }
 }
