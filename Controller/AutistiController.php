@@ -73,12 +73,7 @@ class AutistiController
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        try {
-            AutistiRepository::delete($args['id']);
-            return $response->withHeader('Location', BASE_PATH . '/autisti')->withStatus(302);
-        } catch (\Throwable $e) {
-            $response->getBody()->write($e->getMessage());
-            return $response->withStatus(400);
-        }
+        AutistiRepository::delete($args['id']);
+        return $response->withHeader('Location', BASE_PATH . '/autisti')->withStatus(302);
     }
 }

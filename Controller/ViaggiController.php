@@ -73,12 +73,7 @@ class ViaggiController
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        try {
-            ViaggiRepository::delete($args['id']);
-            return $response->withHeader('Location', BASE_PATH . '/viaggi')->withStatus(302);
-        } catch (\Throwable $e) {
-            $response->getBody()->write($e->getMessage());
-            return $response->withStatus(400);
-        }
+        ViaggiRepository::delete($args['id']);
+        return $response->withHeader('Location', BASE_PATH . '/viaggi')->withStatus(302);
     }
 }

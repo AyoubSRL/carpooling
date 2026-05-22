@@ -50,18 +50,26 @@ class passeggeriRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare('DELETE FROM feedbackpas WHERE idPasseggero = :id');
+            $stmt->execute(['id' => $id]);
 
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM richiesta WHERE idPasseggero = :id');
-        $stmt->execute(['id' => $id]);
-        if ((int)$stmt->fetchColumn() > 0) {
-            throw new \RuntimeException('Impossibile eliminare: passeggero associato a prenotazioni.');
+            $stmt = $pdo->prepare('DELETE FROM feedbackaut WHERE idPasseggero = :id');
+            $stmt->execute(['id' => $id]);
+
+            $stmt = $pdo->prepare('DELETE FROM richiesta WHERE idPasseggero = :id');
+            $stmt->execute(['id' => $id]);
+
+            $stmt = $pdo->prepare('DELETE FROM passeggero WHERE idPasseggero = :id');
+            $stmt->execute(['id' => $id]);
+
+            $pdo->commit();
+            return true;
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            return false;
         }
-
-        $stmt = $pdo->prepare('DELETE FROM feedbackpas WHERE idPasseggero = :id');
-        $stmt->execute(['id' => $id]);
-
-        $stmt = $pdo->prepare('DELETE FROM passeggero WHERE idPasseggero = :id');
-        return $stmt->execute(['id' => $id]);
     }
 
     public static function search(string $q)

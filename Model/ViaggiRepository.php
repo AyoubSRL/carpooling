@@ -49,15 +49,32 @@ class ViaggiRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare('SELECT idAutista FROM viaggio WHERE idViaggio = :id');
+            $stmt->execute(['id' => $id]);
+            $idAutista = $stmt->fetchColumn();
 
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM richiesta WHERE idViaggio = :id');
-        $stmt->execute(['id' => $id]);
-        if ((int)$stmt->fetchColumn() > 0) {
-            throw new \RuntimeException('Impossibile eliminare: viaggio associato a prenotazioni.');
+            $stmt = $pdo->prepare('DELETE FROM richiesta WHERE idViaggio = :id');
+            $stmt->execute(['id' => $id]);
+
+            if ($idAutista !== false) {
+                $stmt = $pdo->prepare('DELETE f FROM feedbackaut f JOIN richiesta r ON r.idPasseggero = f.idPasseggero WHERE r.idViaggio = :id AND f.idAutista = :idAutista');
+                $stmt->execute(['id' => $id, 'idAutista' => $idAutista]);
+
+                $stmt = $pdo->prepare('DELETE f FROM feedbackpas f JOIN richiesta r ON r.idPasseggero = f.idPasseggero WHERE r.idViaggio = :id AND f.idAutista = :idAutista');
+                $stmt->execute(['id' => $id, 'idAutista' => $idAutista]);
+            }
+
+            $stmt = $pdo->prepare('DELETE FROM viaggio WHERE idViaggio = :id');
+            $stmt->execute(['id' => $id]);
+
+            $pdo->commit();
+            return true;
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            return false;
         }
-
-        $stmt = $pdo->prepare('DELETE FROM viaggio WHERE idViaggio = :id');
-        return $stmt->execute(['id' => $id]);
     }
 
     public static function search(string $q)

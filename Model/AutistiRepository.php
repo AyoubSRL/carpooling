@@ -50,24 +50,33 @@ class AutistiRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare('DELETE FROM feedbackaut WHERE idAutista = :id');
+            $stmt->execute(['id' => $id]);
 
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM viaggio WHERE idAutista = :id');
-        $stmt->execute(['id' => $id]);
-        if ((int)$stmt->fetchColumn() > 0) {
-            throw new \RuntimeException('Impossibile eliminare: autista associato a viaggi.');
+            $stmt = $pdo->prepare('SELECT idViaggio FROM viaggio WHERE idAutista = :id');
+            $stmt->execute(['id' => $id]);
+            $viaggiIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+            if (!empty($viaggiIds)) {
+                $in = implode(',', array_fill(0, count($viaggiIds), '?'));
+                $stmt = $pdo->prepare("DELETE FROM richiesta WHERE idViaggio IN ($in)");
+                $stmt->execute($viaggiIds);
+
+                $stmt = $pdo->prepare("DELETE FROM viaggio WHERE idViaggio IN ($in)");
+                $stmt->execute($viaggiIds);
+            }
+
+            $stmt = $pdo->prepare('DELETE FROM autista WHERE idAutista = :id');
+            $stmt->execute(['id' => $id]);
+
+            $pdo->commit();
+            return true;
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            return false;
         }
-
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM richiesta r JOIN viaggio v ON v.idViaggio = r.idViaggio WHERE v.idAutista = :id');
-        $stmt->execute(['id' => $id]);
-        if ((int)$stmt->fetchColumn() > 0) {
-            throw new \RuntimeException('Impossibile eliminare: autista associato a prenotazioni.');
-        }
-
-        $stmt = $pdo->prepare('DELETE FROM feedbackaut WHERE idAutista = :id');
-        $stmt->execute(['id' => $id]);
-
-        $stmt = $pdo->prepare('DELETE FROM autista WHERE idAutista = :id');
-        return $stmt->execute(['id' => $id]);
     }
 
     public static function search(string $q)
