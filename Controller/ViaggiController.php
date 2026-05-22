@@ -39,7 +39,9 @@ class ViaggiController
     public function create(Request $request, Response $response): Response
     {
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('viaggi/create'));
+        $response->getBody()->write($engine->render('viaggi/create', [
+            'base_path' => BASE_PATH
+        ]));
         return $response;
     }
 
@@ -47,7 +49,7 @@ class ViaggiController
     {
         $data = $request->getParsedBody();
         ViaggiRepository::create($data);
-        return $response->withHeader('Location', '/viaggi')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/viaggi')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -64,12 +66,12 @@ class ViaggiController
     {
         $data = $request->getParsedBody();
         ViaggiRepository::update($args['id'], $data);
-        return $response->withHeader('Location', '/viaggi/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/viaggi/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         ViaggiRepository::delete($args['id']);
-        return $response->withHeader('Location', '/viaggi')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/viaggi')->withStatus(302);
     }
 }

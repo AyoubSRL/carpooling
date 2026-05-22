@@ -39,7 +39,9 @@ class PrenotazioniController
     public function create(Request $request, Response $response): Response
     {
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('prenotazioni/create'));
+        $response->getBody()->write($engine->render('prenotazioni/create', [
+            'base_path' => BASE_PATH
+        ]));
         return $response;
     }
 
@@ -47,7 +49,7 @@ class PrenotazioniController
     {
         $data = $request->getParsedBody();
         PrenotazioniRepository::create($data);
-        return $response->withHeader('Location', '/prenotazioni')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/prenotazioni')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -64,12 +66,12 @@ class PrenotazioniController
     {
         $data = $request->getParsedBody();
         PrenotazioniRepository::update($args['id'], $data);
-        return $response->withHeader('Location', '/prenotazioni/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/prenotazioni/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         PrenotazioniRepository::delete($args['id']);
-        return $response->withHeader('Location', '/prenotazioni')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/prenotazioni')->withStatus(302);
     }
 }

@@ -39,7 +39,9 @@ class AutistiController
     public function create(Request $request, Response $response): Response
     {
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('autisti/create'));
+        $response->getBody()->write($engine->render('autisti/create', [
+            'base_path' => BASE_PATH
+        ]));
         return $response;
     }
 
@@ -47,7 +49,7 @@ class AutistiController
     {
         $data = $request->getParsedBody();
         AutistiRepository::create($data);
-        return $response->withHeader('Location', '/autisti')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/autisti')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -64,12 +66,12 @@ class AutistiController
     {
         $data = $request->getParsedBody();
         AutistiRepository::update($args['id'], $data);
-        return $response->withHeader('Location', '/autisti/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/autisti/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         AutistiRepository::delete($args['id']);
-        return $response->withHeader('Location', '/autisti')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/autisti')->withStatus(302);
     }
 }

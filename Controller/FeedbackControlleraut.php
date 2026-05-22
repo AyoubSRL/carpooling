@@ -48,7 +48,7 @@ class FeedbackControlleraut
         $data = $request->getParsedBody();
         $data['data_creazione'] = date('Y-m-d H:i:s');
         FeedbackRespositoryaut::create($data);
-        return $response->withHeader('Location', '/feedback/autisti')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/feedback/autisti')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -65,12 +65,12 @@ class FeedbackControlleraut
     {
         $data = $request->getParsedBody();
         FeedbackRespositoryaut::update($args['id'], $data);
-        return $response->withHeader('Location', '/feedback/autisti/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/feedback/autisti/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         FeedbackRespositoryaut::delete($args['id']);
-        return $response->withHeader('Location', '/feedback/autisti')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/feedback/autisti')->withStatus(302);
     }
 }

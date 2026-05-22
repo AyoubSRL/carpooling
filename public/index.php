@@ -41,6 +41,8 @@ $container->set('template', function (){
 
 $container->set('images', IMAGES);
 
+
+
 // Define Custom Error Handler
 $customErrorHandler = function (
     Request $request,

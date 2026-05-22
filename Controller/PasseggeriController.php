@@ -39,7 +39,9 @@ class PasseggeriController
     public function create(Request $request, Response $response): Response
     {
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('passeggeri/create'));
+        $response->getBody()->write($engine->render('passeggeri/create', [
+            'base_path' => BASE_PATH
+        ]));
         return $response;
     }
 
@@ -47,7 +49,7 @@ class PasseggeriController
     {
         $data = $request->getParsedBody();
         PasseggeriRepository::create($data);
-        return $response->withHeader('Location', '/passeggeri')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/passeggeri')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -64,12 +66,12 @@ class PasseggeriController
     {
         $data = $request->getParsedBody();
         PasseggeriRepository::update($args['id'], $data);
-        return $response->withHeader('Location', '/passeggeri/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/passeggeri/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         PasseggeriRepository::delete($args['id']);
-        return $response->withHeader('Location', '/passeggeri')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/passeggeri')->withStatus(302);
     }
 }

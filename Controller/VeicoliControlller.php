@@ -47,7 +47,7 @@ class VeicoliControlller
     {
         $data = $request->getParsedBody();
         VeicoliRepository::create($data);
-        return $response->withHeader('Location', '/veicoli')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/veicoli')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -64,12 +64,12 @@ class VeicoliControlller
     {
         $data = $request->getParsedBody();
         VeicoliRepository::update($args['id'], $data);
-        return $response->withHeader('Location', '/veicoli/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/veicoli/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         VeicoliRepository::delete($args['id']);
-        return $response->withHeader('Location', '/veicoli')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/veicoli')->withStatus(302);
     }
 }

@@ -48,7 +48,7 @@ class FeedbackControllerpas
         $data = $request->getParsedBody();
         $data['data_creazione'] = date('Y-m-d H:i:s');
         FeedbackRespositorypas::create($data);
-        return $response->withHeader('Location', '/feedback/passeggeri')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/feedback/passeggeri')->withStatus(302);
     }
 
     public function edit(Request $request, Response $response, array $args): Response
@@ -65,12 +65,12 @@ class FeedbackControllerpas
     {
         $data = $request->getParsedBody();
         FeedbackRespositorypas::update($args['id'], $data);
-        return $response->withHeader('Location', '/feedback/passeggeri/' . $args['id'])->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/feedback/passeggeri/' . $args['id'])->withStatus(302);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
         FeedbackRespositorypas::delete($args['id']);
-        return $response->withHeader('Location', '/feedback/passeggeri')->withStatus(302);
+        return $response->withHeader('Location', BASE_PATH . '/feedback/passeggeri')->withStatus(302);
     }
 }
