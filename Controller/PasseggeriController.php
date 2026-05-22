@@ -59,7 +59,7 @@ class PasseggeriController
         $passeggero = PasseggeriRepository::find($args['id']);
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('passeggeri/edit',
-            ['passeggero' => $passeggero]
+            ['passeggero' => $passeggero, 'base_path' => BASE_PATH]
         ));
         return $response;
     }

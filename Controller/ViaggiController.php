@@ -59,7 +59,7 @@ class ViaggiController
         $viaggio = ViaggiRepository::find($args['id']);
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('viaggi/edit',
-            ['viaggio' => $viaggio]
+            ['viaggio' => $viaggio, 'base_path' => BASE_PATH]
         ));
         return $response;
     }

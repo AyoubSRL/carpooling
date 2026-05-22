@@ -137,6 +137,7 @@ $app->post('/veicoli', VeicoliControlller::class . ':store');
 $app->get('/veicoli/{id}', VeicoliControlller::class . ':show');
 $app->get('/veicoli/{id}/edit', VeicoliControlller::class . ':edit');
 $app->post('/veicoli/{id}', VeicoliControlller::class . ':update');
+$app->get('/veicoli/{id}/delete', VeicoliControlller::class . ':delete');
 
 // Viaggi routes
 $app->get('/viaggi', ViaggiController::class . ':index');
@@ -154,6 +155,7 @@ $app->post('/prenotazioni', PrenotazioniController::class . ':store');
 $app->get('/prenotazioni/{id}', PrenotazioniController::class . ':show');
 $app->get('/prenotazioni/{id}/edit', PrenotazioniController::class . ':edit');
 $app->post('/prenotazioni/{id}', PrenotazioniController::class . ':update');
+$app->get('/prenotazioni/{id}/delete', PrenotazioniController::class . ':delete');
 
 // Feedback Autisti routes
 $app->get('/feedback/autisti', FeedbackControlleraut::class . ':index');

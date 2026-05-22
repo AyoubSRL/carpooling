@@ -41,7 +41,9 @@ class VeicoliControlller
     public function create(Request $request, Response $response): Response
     {
         $engine = $this->container->get('template');
-        $response->getBody()->write($engine->render('veicoli/create'));
+        $response->getBody()->write($engine->render('veicoli/create', [
+            'base_path' => BASE_PATH
+        ]));
         return $response;
     }
 
@@ -57,7 +59,7 @@ class VeicoliControlller
         $veicolo = VeicoliRepository::find($args['id']);
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('veicoli/edit',
-            ['veicolo' => $veicolo]
+            ['veicolo' => $veicolo, 'base_path' => BASE_PATH]
         ));
         return $response;
     }

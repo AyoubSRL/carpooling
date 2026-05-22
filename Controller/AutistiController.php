@@ -59,7 +59,7 @@ class AutistiController
         $autista = AutistiRepository::find($args['id']);
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('autisti/edit',
-            ['autista' => $autista]
+            ['autista' => $autista, 'base_path' => BASE_PATH]
         ));
         return $response;
     }
