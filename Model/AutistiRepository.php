@@ -50,6 +50,25 @@ class AutistiRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM viaggio WHERE idAutista = :id');
+        $stmt->execute(['id' => $id]);
+        if ((int)$stmt->fetchColumn() > 0) {
+            throw new \RuntimeException('Impossibile eliminare: autista associato a viaggi.');
+        }
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM richiesta r JOIN viaggio v ON v.idViaggio = r.idViaggio WHERE v.idAutista = :id');
+        $stmt->execute(['id' => $id]);
+        if ((int)$stmt->fetchColumn() > 0) {
+            throw new \RuntimeException('Impossibile eliminare: autista associato a prenotazioni.');
+        }
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM feedbackautista WHERE idAutista = :id');
+        $stmt->execute(['id' => $id]);
+        if ((int)$stmt->fetchColumn() > 0) {
+            throw new \RuntimeException('Impossibile eliminare: autista associato a feedback.');
+        }
+
         $stmt = $pdo->prepare('DELETE FROM autista WHERE idAutista = :id');
         return $stmt->execute(['id' => $id]);
     }

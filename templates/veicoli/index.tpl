@@ -23,6 +23,6 @@
 </td></tr>
 <?php endforeach; ?>
 <?php else: ?>
-<tr><td colspan="5">Nessun veicolo trovato</td></tr>
+<tr><td colspan="4">Nessun veicolo trovato</td></tr>
 <?php endif; ?>
 </tbody></table>

@@ -17,7 +17,7 @@ class VeicoliRepository
     public static function find($id)
     {
         $pdo = Connection::getInstance();
-        $stmt = $pdo->prepare('SELECT idAutista as id, targa, modello, modello FROM autista WHERE idAutista = :id');
+        $stmt = $pdo->prepare('SELECT idAutista as id, targa, modello FROM autista WHERE idAutista = :id');
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
@@ -46,7 +46,7 @@ class VeicoliRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
-        $stmt = $pdo->prepare('DELETE FROM autista WHERE idAutista = :id');
+        $stmt = $pdo->prepare('UPDATE autista SET targa = NULL, modello = NULL WHERE idAutista = :id');
         return $stmt->execute(['id' => $id]);
     }
 

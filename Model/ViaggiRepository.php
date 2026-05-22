@@ -49,6 +49,13 @@ class ViaggiRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM richiesta WHERE idViaggio = :id');
+        $stmt->execute(['id' => $id]);
+        if ((int)$stmt->fetchColumn() > 0) {
+            throw new \RuntimeException('Impossibile eliminare: viaggio associato a prenotazioni.');
+        }
+
         $stmt = $pdo->prepare('DELETE FROM viaggio WHERE idViaggio = :id');
         return $stmt->execute(['id' => $id]);
     }

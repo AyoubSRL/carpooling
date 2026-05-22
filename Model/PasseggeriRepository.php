@@ -50,6 +50,19 @@ class passeggeriRepository
     public static function delete($id)
     {
         $pdo = Connection::getInstance();
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM richiesta WHERE idPasseggero = :id');
+        $stmt->execute(['id' => $id]);
+        if ((int)$stmt->fetchColumn() > 0) {
+            throw new \RuntimeException('Impossibile eliminare: passeggero associato a prenotazioni.');
+        }
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM feedbackpasseggero WHERE idPasseggero = :id');
+        $stmt->execute(['id' => $id]);
+        if ((int)$stmt->fetchColumn() > 0) {
+            throw new \RuntimeException('Impossibile eliminare: passeggero associato a feedback.');
+        }
+
         $stmt = $pdo->prepare('DELETE FROM passeggero WHERE idPasseggero = :id');
         return $stmt->execute(['id' => $id]);
     }

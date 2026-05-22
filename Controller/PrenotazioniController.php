@@ -73,7 +73,12 @@ class PrenotazioniController
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        PrenotazioniRepository::delete($args['id']);
-        return $response->withHeader('Location', BASE_PATH . '/prenotazioni')->withStatus(302);
+        try {
+            PrenotazioniRepository::delete($args['id']);
+            return $response->withHeader('Location', BASE_PATH . '/prenotazioni')->withStatus(302);
+        } catch (\Throwable $e) {
+            $response->getBody()->write($e->getMessage());
+            return $response->withStatus(400);
+        }
     }
 }

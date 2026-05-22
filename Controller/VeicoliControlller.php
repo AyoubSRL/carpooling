@@ -73,7 +73,12 @@ class VeicoliControlller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        VeicoliRepository::delete($args['id']);
-        return $response->withHeader('Location', BASE_PATH . '/veicoli')->withStatus(302);
+        try {
+            VeicoliRepository::delete($args['id']);
+            return $response->withHeader('Location', BASE_PATH . '/veicoli')->withStatus(302);
+        } catch (\Throwable $e) {
+            $response->getBody()->write($e->getMessage());
+            return $response->withStatus(400);
+        }
     }
 }
