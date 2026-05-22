@@ -18,10 +18,12 @@ class PasseggeriController
 
     public function index(Request $request, Response $response): Response
     {
-        $passeggeri = PasseggeriRepository::findAll();
+        $q = $request->getQueryParams()['q'] ?? '';
+        $passeggeri = trim((string)$q) !== '' ? PasseggeriRepository::search((string)$q) : PasseggeriRepository::findAll();
+
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('passeggeri/index',
-            ['passeggeri' => $passeggeri]
+            ['passeggeri' => $passeggeri, 'q' => $q]
         ));
         return $response;
     }

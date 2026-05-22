@@ -18,10 +18,12 @@ class VeicoliControlller
 
     public function index(Request $request, Response $response): Response
     {
-        $veicoli = VeicoliRepository::findAll();
+        $q = $request->getQueryParams()['q'] ?? '';
+        $veicoli = trim((string)$q) !== '' ? VeicoliRepository::search((string)$q) : VeicoliRepository::findAll();
+
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('veicoli/index',
-            ['veicoli' => $veicoli]
+            ['veicoli' => $veicoli, 'q' => $q]
         ));
         return $response;
     }

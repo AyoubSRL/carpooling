@@ -53,4 +53,26 @@ class passeggeriRepository
         $stmt = $pdo->prepare('DELETE FROM passeggero WHERE idPasseggero = :id');
         return $stmt->execute(['id' => $id]);
     }
+
+    public static function search(string $q)
+    {
+        $pdo = Connection::getInstance();
+        $q = trim($q);
+        if ($q === '') {
+            return self::findAll();
+        }
+
+        $like = '%' . $q . '%';
+        $stmt = $pdo->prepare(
+            'SELECT idPasseggero as id, nome, cognome, nTelefono as telefono, email
+             FROM passeggero
+             WHERE CAST(idPasseggero AS CHAR) LIKE :q
+                OR nome LIKE :q
+                OR cognome LIKE :q
+                OR nTelefono LIKE :q
+                OR email LIKE :q'
+        );
+        $stmt->execute(['q' => $like]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

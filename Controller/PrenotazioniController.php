@@ -18,10 +18,12 @@ class PrenotazioniController
 
     public function index(Request $request, Response $response): Response
     {
-        $prenotazioni = PrenotazioniRepository::findAll();
+        $q = $request->getQueryParams()['q'] ?? '';
+        $prenotazioni = trim((string)$q) !== '' ? PrenotazioniRepository::search((string)$q) : PrenotazioniRepository::findAll();
+
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('prenotazioni/index',
-            ['prenotazioni' => $prenotazioni]
+            ['prenotazioni' => $prenotazioni, 'q' => $q]
         ));
         return $response;
     }

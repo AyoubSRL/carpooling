@@ -18,10 +18,12 @@ class ViaggiController
 
     public function index(Request $request, Response $response): Response
     {
-        $viaggi = ViaggiRepository::findAll();
+        $q = $request->getQueryParams()['q'] ?? '';
+        $viaggi = trim((string)$q) !== '' ? ViaggiRepository::search((string)$q) : ViaggiRepository::findAll();
+
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('viaggi/index',
-            ['viaggi' => $viaggi, 'base_path' => BASE_PATH]
+            ['viaggi' => $viaggi, 'base_path' => BASE_PATH, 'q' => $q]
         ));
         return $response;
     }

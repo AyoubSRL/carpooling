@@ -18,10 +18,12 @@ class AutistiController
 
     public function index(Request $request, Response $response): Response
     {
-        $autisti = AutistiRepository::findAll();
+        $q = $request->getQueryParams()['q'] ?? '';
+        $autisti = trim((string)$q) !== '' ? AutistiRepository::search((string)$q) : AutistiRepository::findAll();
+
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('autisti/index',
-            ['autisti' => $autisti]
+            ['autisti' => $autisti, 'q' => $q]
         ));
         return $response;
     }

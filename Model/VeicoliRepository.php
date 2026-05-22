@@ -49,4 +49,24 @@ class VeicoliRepository
         $stmt = $pdo->prepare('DELETE FROM autista WHERE idAutista = :id');
         return $stmt->execute(['id' => $id]);
     }
+
+    public static function search(string $q)
+    {
+        $pdo = Connection::getInstance();
+        $q = trim($q);
+        if ($q === '') {
+            return self::findAll();
+        }
+
+        $like = '%' . $q . '%';
+        $stmt = $pdo->prepare(
+            'SELECT idAutista as id, targa, modello
+             FROM autista
+             WHERE CAST(idAutista AS CHAR) LIKE :q
+                OR targa LIKE :q
+                OR modello LIKE :q'
+        );
+        $stmt->execute(['q' => $like]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

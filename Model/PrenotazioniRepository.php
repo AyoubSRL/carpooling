@@ -49,4 +49,25 @@ class PrenotazioniRepository
         $stmt = $pdo->prepare('DELETE FROM richiesta WHERE idRichiesta = :id');
         return $stmt->execute(['id' => $id]);
     }
+
+    public static function search(string $q)
+    {
+        $pdo = Connection::getInstance();
+        $q = trim($q);
+        if ($q === '') {
+            return self::findAll();
+        }
+
+        $like = '%' . $q . '%';
+        $stmt = $pdo->prepare(
+            'SELECT idRichiesta as id, idViaggio as viaggio_id, idPasseggero as passeggero_id, accettata as status
+             FROM richiesta
+             WHERE CAST(idRichiesta AS CHAR) LIKE :q
+                OR CAST(idViaggio AS CHAR) LIKE :q
+                OR CAST(idPasseggero AS CHAR) LIKE :q
+                OR CAST(accettata AS CHAR) LIKE :q'
+        );
+        $stmt->execute(['q' => $like]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

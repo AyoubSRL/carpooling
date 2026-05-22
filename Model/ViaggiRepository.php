@@ -52,4 +52,27 @@ class ViaggiRepository
         $stmt = $pdo->prepare('DELETE FROM viaggio WHERE idViaggio = :id');
         return $stmt->execute(['id' => $id]);
     }
+
+    public static function search(string $q)
+    {
+        $pdo = Connection::getInstance();
+        $q = trim($q);
+        if ($q === '') {
+            return self::findAll();
+        }
+
+        $like = '%' . $q . '%';
+        $stmt = $pdo->prepare(
+            'SELECT idViaggio as id, cittaPartenza as partenza, cittaDestinazione as destinazione, CONCAT(data, " ", ora) as data_ora
+             FROM viaggio
+             WHERE CAST(idViaggio AS CHAR) LIKE :q
+                OR cittaPartenza LIKE :q
+                OR cittaDestinazione LIKE :q
+                OR CAST(idAutista AS CHAR) LIKE :q
+                OR CAST(data AS CHAR) LIKE :q
+                OR CAST(ora AS CHAR) LIKE :q'
+        );
+        $stmt->execute(['q' => $like]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
