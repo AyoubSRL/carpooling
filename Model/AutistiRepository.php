@@ -63,7 +63,7 @@ class AutistiRepository
             throw new \RuntimeException('Impossibile eliminare: autista associato a prenotazioni.');
         }
 
-        $stmt = $pdo->prepare('DELETE FROM feedbackautista WHERE idAutista = :id');
+        $stmt = $pdo->prepare('DELETE FROM feedbackaut WHERE idAutista = :id');
         $stmt->execute(['id' => $id]);
 
         $stmt = $pdo->prepare('DELETE FROM autista WHERE idAutista = :id');

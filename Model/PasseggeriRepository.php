@@ -57,7 +57,7 @@ class passeggeriRepository
             throw new \RuntimeException('Impossibile eliminare: passeggero associato a prenotazioni.');
         }
 
-        $stmt = $pdo->prepare('DELETE FROM feedbackpasseggero WHERE idPasseggero = :id');
+        $stmt = $pdo->prepare('DELETE FROM feedbackpas WHERE idPasseggero = :id');
         $stmt->execute(['id' => $id]);
 
         $stmt = $pdo->prepare('DELETE FROM passeggero WHERE idPasseggero = :id');
