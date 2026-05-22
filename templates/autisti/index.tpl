@@ -3,6 +3,14 @@
 <h1>Autisti</h1>
 <a href="<?= $this->e($base_path) ?>/autisti/create">Nuovo Autista</a>
 
+<form method="get" action="<?= $this->e($base_path) ?>/autisti" style="margin: 12px 0;">
+    <input type="text" name="q" value="<?= $this->e($q ?? '') ?>" placeholder="Cerca..." />
+    <button type="submit">Cerca</button>
+    <?php if (isset($q) && trim((string)$q) !== ''): ?>
+        <a href="<?= $this->e($base_path) ?>/autisti">Reset</a>
+    <?php endif; ?>
+</form>
+
 <div>
     <table>
         <thead>

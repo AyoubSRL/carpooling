@@ -1,6 +1,15 @@
 <?php $this->layout('layout', ['title' => 'Prenotazioni', 'base_path' => $base_path]) ?>
 <h1>Prenotazioni</h1>
 <a href="<?= $this->e($base_path) ?>/prenotazioni/create">Nuova Prenotazione</a>
+
+<form method="get" action="<?= $this->e($base_path) ?>/prenotazioni" style="margin: 12px 0;">
+    <input type="text" name="q" value="<?= $this->e($q ?? '') ?>" placeholder="Cerca..." />
+    <button type="submit">Cerca</button>
+    <?php if (isset($q) && trim((string)$q) !== ''): ?>
+        <a href="<?= $this->e($base_path) ?>/prenotazioni">Reset</a>
+    <?php endif; ?>
+</form>
+
 <table>
 <thead><tr><th>ID</th><th>Viaggio</th><th>Passeggero</th><th>Status</th><th>Azioni</th></tr></thead>
 <tbody>

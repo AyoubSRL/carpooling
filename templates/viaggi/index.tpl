@@ -3,6 +3,14 @@
 <h1>Viaggi</h1>
 <a href="<?= $this->e($base_path) ?>/viaggi/create">Nuovo Viaggio</a>
 
+<form method="get" action="<?= $this->e($base_path) ?>/viaggi" style="margin: 12px 0;">
+    <input type="text" name="q" value="<?= $this->e($q ?? '') ?>" placeholder="Cerca..." />
+    <button type="submit">Cerca</button>
+    <?php if (isset($q) && trim((string)$q) !== ''): ?>
+        <a href="<?= $this->e($base_path) ?>/viaggi">Reset</a>
+    <?php endif; ?>
+</form>
+
 <table>
 <thead><tr><th>ID</th><th>Partenza</th><th>Destinazione</th><th>Data</th><th>Azioni</th></tr></thead>
 <tbody>

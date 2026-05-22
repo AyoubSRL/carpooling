@@ -1,6 +1,15 @@
 <?php $this->layout('layout', ['title' => 'Veicoli', 'base_path' => $base_path]) ?>
 <h1>Veicoli</h1>
 <a href="<?= $this->e($base_path) ?>/veicoli/create">Nuovo Veicolo</a>
+
+<form method="get" action="<?= $this->e($base_path) ?>/veicoli" style="margin: 12px 0;">
+    <input type="text" name="q" value="<?= $this->e($q ?? '') ?>" placeholder="Cerca..." />
+    <button type="submit">Cerca</button>
+    <?php if (isset($q) && trim((string)$q) !== ''): ?>
+        <a href="<?= $this->e($base_path) ?>/veicoli">Reset</a>
+    <?php endif; ?>
+</form>
+
 <table>
 <thead><tr><th>ID</th><th>Targa</th><th>Modello</th><th>Azioni</th></tr></thead>
 <tbody>
