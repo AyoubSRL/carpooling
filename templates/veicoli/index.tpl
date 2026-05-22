@@ -16,7 +16,11 @@
 <?php if(isset($veicoli) && count($veicoli) > 0): ?>
 <?php foreach ($veicoli as $v): ?>
 <tr><td><?= $this->e($v['id']) ?></td><td><?= $this->e($v['targa']) ?></td><td><?= $this->e($v['modello']) ?></td>
-<td><a href="<?= $this->e($base_path) ?>/veicoli/<?= $this->e($v['id']) ?>">Visualizza</a></td></tr>
+<td>
+    <a href="<?= $this->e($base_path) ?>/veicoli/<?= $this->e($v['id']) ?>">Visualizza</a>
+    <a href="<?= $this->e($base_path) ?>/veicoli/<?= $this->e($v['id']) ?>/edit">Modifica</a>
+    <a href="<?= $this->e($base_path) ?>/veicoli/<?= $this->e($v['id']) ?>/delete" onclick="return confirm('Sei sicuro?')">Elimina</a>
+</td></tr>
 <?php endforeach; ?>
 <?php else: ?>
 <tr><td colspan="5">Nessun veicolo trovato</td></tr>

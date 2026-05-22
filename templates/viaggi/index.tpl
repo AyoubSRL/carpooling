@@ -17,7 +17,11 @@
 <?php if(isset($viaggi) && count($viaggi) > 0): ?>
 <?php foreach ($viaggi as $v): ?>
 <tr><td><?= $this->e($v['id']) ?></td><td><?= $this->e($v['partenza']) ?></td><td><?= $this->e($v['destinazione']) ?></td><td><?= $this->e($v['data_ora']) ?></td>
-<td><a href="<?= $this->e($base_path) ?>/viaggi/<?= $this->e($v['id']) ?>">Visualizza</a></td></tr>
+<td>
+    <a href="<?= $this->e($base_path) ?>/viaggi/<?= $this->e($v['id']) ?>">Visualizza</a>
+    <a href="<?= $this->e($base_path) ?>/viaggi/<?= $this->e($v['id']) ?>/edit">Modifica</a>
+    <a href="<?= $this->e($base_path) ?>/viaggi/<?= $this->e($v['id']) ?>/delete" onclick="return confirm('Sei sicuro?')">Elimina</a>
+</td></tr>
 <?php endforeach; ?>
 <?php else: ?>
 <tr><td colspan="5">Nessun viaggio trovato</td></tr>
