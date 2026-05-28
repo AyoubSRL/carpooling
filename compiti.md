@@ -7,7 +7,7 @@ Contesto tecnico e vincoli
 - Linguaggio: PHP. Prepared statements obbligatori per query.
 - Nomi e firme: mantenere nomi metodi e variabili come nell'esempio master per compatibilità con le view e le route.
 - Sicurezza: includere CSRF token nei form, gestire errori di validazione e mostrare errori nei template.
-- Test manuale: fornire comandi Windows per installare e avviare: `composer install` e `php -S localhost:8000 -t public`.
+- Test manuale: fornire comandi Windows per installare e avviare: `composer install` e `php -S localhost:8000 -t public`,
 
 Attività richieste (output atteso da te)
 1) Piano sintetico in 3 step per implementazione.

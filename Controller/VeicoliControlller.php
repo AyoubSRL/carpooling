@@ -63,7 +63,6 @@ class VeicoliControlller
         ));
         return $response;
     }
-
     public function update(Request $request, Response $response, array $args): Response
     {
         $data = $request->getParsedBody();

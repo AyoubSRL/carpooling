@@ -15,7 +15,6 @@ class PasseggeriController
     {
         $this->container = $container;
     }
-
     public function index(Request $request, Response $response): Response
     {
         $q = $request->getQueryParams()['q'] ?? '';

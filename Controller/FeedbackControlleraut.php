@@ -15,13 +15,12 @@ class FeedbackControlleraut
     {
         $this->container = $container;
     }
-
     public function index(Request $request, Response $response): Response
     {
         $feedback = FeedbackRespositoryaut::findAll();
         $engine = $this->container->get('template');
         $response->getBody()->write($engine->render('feedback/index',
-            ['feedback' => $feedback, 'type' => 'autisti']
+            ['feedback' => $feedback, 'type' => 'autisti'] 
         ));
         return $response;
     }

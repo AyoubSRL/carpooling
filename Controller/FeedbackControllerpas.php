@@ -15,7 +15,6 @@ class FeedbackControllerpas
     {
         $this->container = $container;
     }
-
     public function index(Request $request, Response $response): Response
     {
         $feedback = FeedbackRespositorypas::findAll();
